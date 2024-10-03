@@ -1,0 +1,128 @@
+[
+  {
+    "package": "com.google.android.youtube.tv",
+    "name": "app_youtube"
+  },
+  {
+    "package": "com.google.android.youtube",
+    "name": "app_youtube"
+  },
+  {
+    "package": "com.android.browser",
+    "name": "app_browser"
+  },
+  {
+    "package": "com.android.documentsui",
+    "name": "app_documents"
+  },
+  {
+    "package": "com.android.providers.downloads.ui",
+    "name": "app_documents"
+  },
+  {
+    "package": "com.cvte.filebrowser.activity",
+    "name": "app_filebrowser"
+  },
+  {
+    "package": "com.netflix.mediaclient",
+    "name": "app_netflix"
+  },
+  {
+    "package": "com.cvte.tv.media",
+    "name": "app_multimedia"
+  },
+  {
+    "package": "cm.aptoidetv.pt.cvt_platform7",
+    "name": "app_aptoidetv"
+  },
+  {
+    "package": "cm.aptoidetv.pt.cvt_hv553",
+    "name": "app_aptoidetv"
+  },
+  {
+    "package": "cm.aptoidetv.pt.cvt_ms358",
+    "name": "app_aptoidetv"
+  },
+  {
+    "package": "com.cvte.tvclean",
+    "name": "app_tvclean"
+  },
+  {
+    "package": "com.cvte.cloudwalkota",
+    "name": "app_ota"
+  },
+  {
+    "package": "com.ecloud.eshare.server",
+    "name": "app_eshareserver"
+  },
+  {
+    "package": "com.ecloud.eairplay",
+    "name": "app_imirror"
+  },
+  {
+    "package": "tv.cloudwalker.cloudwalkeruniverse",
+    "name": "app_moviebox"
+  },
+  {
+    "package": "com.android.vending",
+    "name": "app_vending"
+  },
+  {
+    "package": "com.hisilicon.miracast",
+    "name": "app_miracast"
+  },
+  {
+    "package": "com.droidlogic.miracast",
+    "name": "app_miracast"
+  },
+  {
+    "package": "com.cvte.miracast",
+    "name": "app_miracast"
+  },
+  {
+    "package": "com.cvte.miracast",
+    "name": "app_miracast"
+  },
+  {
+    "package": "com.hungama.movies.tv",
+    "name": "app_hungamaplay"
+  },
+  {
+    "package": "com.balaji.alt",
+    "name": "app_altbalaji"
+  },
+  {
+    "package": "in.startv.hotstar",
+    "name": "app_hotstar"
+  },
+  {
+    "package": "com.sonyliv",
+    "name": "app_sonyliv"
+  },
+  {
+    "package": "com.tv.sonyliv",
+    "name": "app_sonyliv"
+  },
+  {
+    "package": "com.espn.score_center",
+    "name": "app_espn"
+  },
+  {
+    "package": "com.spuul.android",
+    "name": "app_spuul"
+  },
+  {
+    "package": "com.suntv.sunnxt",
+    "name": "app_sunnxt"
+  },
+  {
+    "package": "com.amazon.avod.thirdpartyclient",
+    "name": "app_prime"
+  },
+  {
+    "package": "com.stark.store",
+    "name": "app_appstore"
+  }
+
+
+]

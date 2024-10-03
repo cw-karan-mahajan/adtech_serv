@@ -1,0 +1,54 @@
+{
+  "rowCount": 1,
+  "rows": [
+    {
+      "rowIndex": 0,
+      "rowHeader": "",
+      "rowLayout": "landscape",
+      "rowItems": [
+        {
+          "tileWidth": "1200",
+          "tileHeight": "600",
+          "showTileInfo": "false",
+          "tileType": "type1",
+          "tid": "offline",
+          "title": "For unlimited entertainment...",
+          "poster": "file:///android_asset/defaultrows/Images/offline.png",
+          "background": "file:///android_asset/defaultrows/Images/offline.png",
+          "rating": 0,
+          "runtime": "",
+          "startTime": 0,
+          "startIndex": "0",
+          "target": [
+            "1180"
+          ],
+          "type": "KEYCODE",
+          "useAlternate": false,
+          "alternateUrl": "https://play.google.com/store/apps/details?id=com.android.chrome",
+          "playstoreUrl": "https://play.google.com/store/apps/details?id=com.android.chrome",
+          "package": "com.cvte.tv.setting",
+          "detailPage": false,
+          "source": "Settings",
+          "genre": [
+            "HELP"
+          ],
+          "year": "",
+          "director": [
+            ""
+          ],
+          "cast": [
+            ""
+          ],
+          "synopsis": "Connect to internet to get the maximum out of internet."
+        }
+      ]
+    }
+  ],
+  "carousel": [
+    {
+      "imageUrl": "file:///android_asset/defaultrows/Images/defaultcarousel.jpg",
+      "imageTarget": "https://www.cloudwalker.tv",
+      "imageSize": "1920x500"
+    }
+  ]
+}

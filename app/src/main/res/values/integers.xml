@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="tileLandScapeWidth">320</integer>
+    <integer name="tileLandScapeHeight">180</integer>
+    <integer name="defaulttileWidth">320</integer>
+    <integer name="deafulttileHeight">180</integer>
+    <integer name="tilePotraitWidth">225</integer>
+    <integer name="tilePotraitHeight">300</integer>
+    <integer name="tileSquareWidth">150</integer>
+    <integer name="tileSquareHeight">150</integer>
+</resources>
