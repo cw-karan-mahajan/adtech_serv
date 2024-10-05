@@ -87,16 +87,6 @@ object AppModule {
             .create(ApiService::class.java)
     }
 
-   /* @OptIn(ExperimentalCoroutinesApi::class)
-    @Provides
-    @Singleton
-    fun provideAdRepository(
-        dynamicApiServiceFactory: DynamicApiServiceFactory,
-        networkConnectivity: NetworkConnectivity,
-        gson: Gson
-    ): AdRepository {
-        return AdRepositoryImpl(dynamicApiServiceFactory, networkConnectivity, gson)
-    }*/
 
    /* @UnstableApi
     @Provides

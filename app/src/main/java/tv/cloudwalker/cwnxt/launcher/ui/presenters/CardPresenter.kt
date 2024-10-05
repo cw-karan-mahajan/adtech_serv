@@ -56,7 +56,7 @@ class CardPresenter(private val mainViewModel: MovieViewModel) : Presenter() {
 
         if (item is MovieTile) {
             viewHolder.view.setTag(MOVIE_TILE_TAG_KEY, item)
-            if (item.tileWidth != null && item.tileHeight != null && item.poster != null && item.rowLayout != null) {
+            if (item.tileWidth != null && item.poster != null && item.rowLayout != null) {
                 when {
                     item.rowLayout.equals("landscape", ignoreCase = true) -> {
                         GlideApp.with(viewHolder.view.context)
@@ -113,10 +113,7 @@ class CardPresenter(private val mainViewModel: MovieViewModel) : Presenter() {
                         imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                         imageView.setImageDrawable(context.resources.getDrawable(R.drawable.ic_refresh_black_24dp))
                     } else {
-                        val width = dpToPx(
-                            context,
-                            context.resources.getInteger(R.integer.tilePotraitWidth)
-                        )
+                        val width = dpToPx(context, context.resources.getInteger(R.integer.tilePotraitWidth))
                         val height = dpToPx(
                             context,
                             context.resources.getInteger(R.integer.tilePotraitHeight)

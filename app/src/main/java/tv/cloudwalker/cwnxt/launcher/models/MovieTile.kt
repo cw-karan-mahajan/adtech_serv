@@ -23,8 +23,8 @@ data class MovieAdConfig(
 
 @Keep
 data class MovieTile(
-    val adsVideoUrl: String,
-    val ads_server: String,
+    val adsVideoUrl: String?= "",
+    val ads_server: String?= "",
     val alternateUrl: String,
     val background: String,
     val cast: List<String>,
@@ -54,5 +54,6 @@ data class MovieTile(
     val year: String,
     var rowLayout: String? = "",
     var rowHeader: String? = "",
-    var rowAdConfig: MovieAdConfig? = null
+    var rowAdConfig: MovieAdConfig? = null,
+    var adImageUrl: String? = null
 )

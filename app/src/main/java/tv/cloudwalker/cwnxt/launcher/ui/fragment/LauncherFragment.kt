@@ -1,6 +1,5 @@
 package tv.cloudwalker.cwnxt.launcher.ui.fragment
 
-
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -17,16 +16,18 @@ import androidx.leanback.widget.ListRowPresenter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.util.UnstableApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import tv.cloudwalker.cwnxt.launcher.R
 import tv.cloudwalker.cwnxt.launcher.models.MovieResponse
-import tv.cloudwalker.cwnxt.launcher.ui.presenters.CardPresenter
+import tv.cloudwalker.cwnxt.launcher.ui.presenters.DynamicPresenterSelector
 import tv.cloudwalker.cwnxt.launcher.ui.viewmodel.MovieViewModel
 import tv.cloudwalker.cwnxt.launcher.ui.viewmodel.UiState
 import tv.cloudwalker.cwnxt.launcher.utils.NetworkChangeReceiver
 import tv.cloudwalker.cwnxt.launcher.utils.isConnected
 
+@UnstableApi
 @AndroidEntryPoint
 class LauncherFragment : BrowseSupportFragment(), isConnected {
 
@@ -98,11 +99,11 @@ class LauncherFragment : BrowseSupportFragment(), isConnected {
             selectEffectEnabled = false
         }
         rowsAdapter = ArrayObjectAdapter(lrp)
-        val presenter = createCardLayout()
+        val dynamicPresenter = createCardLayout()
 
         data.rows.forEachIndexed { index, row ->
             val headerItem = HeaderItem(index.toLong(), row.rowHeader)
-            val listRowAdapter = ArrayObjectAdapter(presenter)
+            val listRowAdapter = ArrayObjectAdapter(dynamicPresenter)
 
             row.rowItems.forEach { tile ->
                 tile.rowLayout = row.rowLayout
@@ -119,8 +120,8 @@ class LauncherFragment : BrowseSupportFragment(), isConnected {
         adapter = rowsAdapter
     }
 
-    private fun createCardLayout(): CardPresenter {
-        return CardPresenter(viewModel)
+    private fun createCardLayout(): DynamicPresenterSelector {
+        return DynamicPresenterSelector(viewModel)
     }
 
     private fun showProgressBar() {

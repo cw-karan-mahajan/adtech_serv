@@ -2,7 +2,7 @@
 
     <style name="AppTheme.Leanback.CustomTitle" parent="Theme.Leanback.Browse">
         <item name="browseTitleViewLayout">@layout/titleview</item>
-        <item name="browseRowsMarginTop">60dp</item>
+        <item name="browseRowsMarginTop">70dp</item>
     </style>
 
 </resources>
