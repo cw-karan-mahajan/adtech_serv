@@ -13,6 +13,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import tv.cloudwalker.cwnxt.launcher.core.Constants.BASE_URL
+import tv.cloudwalker.cwnxt.launcher.remote.ApiService
+import tv.cloudwalker.cwnxt.launcher.remote.DynamicApiServiceFactory
+import tv.cloudwalker.cwnxt.launcher.remote.HeaderInterceptor
 import tv.cloudwalker.cwnxt.launcher.utils.Network
 import tv.cloudwalker.cwnxt.launcher.utils.NetworkConnectivity
 import javax.inject.Singleton
@@ -29,22 +33,13 @@ object AppModule {
     @Singleton
     fun provideContext(@ApplicationContext context: Context): Context = context
 
-    /*@Provides
-    @Singleton
-    fun provideMainRepository(
-        @ApplicationContext context: Context,
-        gson: Gson
-    ): MainRepository {
-        return MainRepository(context, gson)
-    }*/
-
     @Provides
     @Singleton
     fun provideNetworkConnectivity(@ApplicationContext context: Context): NetworkConnectivity {
         return Network(context)
     }
 
-   /* @Provides
+    @Provides
     @Singleton
     fun provideDynamicApiServiceFactory(
         retrofitBuilder: Retrofit.Builder,
@@ -57,7 +52,7 @@ object AppModule {
     @Singleton
     fun provideHeaderInterceptor(): HeaderInterceptor {
         return HeaderInterceptor()
-    }*/
+    }
 
     @Provides
     @Singleton
@@ -78,7 +73,7 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
     }
 
-   /* @Provides
+    @Provides
     @Singleton
     fun provideApiService(retrofitBuilder: Retrofit.Builder, okHttpClientBuilder: OkHttpClient.Builder,
                           headerInterceptor: HeaderInterceptor): ApiService {
@@ -90,7 +85,7 @@ object AppModule {
             .client(client)
             .build()
             .create(ApiService::class.java)
-    }*/
+    }
 
    /* @OptIn(ExperimentalCoroutinesApi::class)
     @Provides

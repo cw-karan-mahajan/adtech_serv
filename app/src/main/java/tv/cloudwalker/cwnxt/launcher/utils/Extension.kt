@@ -15,3 +15,10 @@ fun dpToPx(context: Context, dp: Int): Int {
 fun isAndroidVersion9Supported(): Boolean {
     return Build.VERSION.SDK_INT == Build.VERSION_CODES.P
 }
+
+fun makeSecure(imageUrl: String): String {
+    return imageUrl.replace("http://", "https://")
+}
+
+
+

@@ -19,7 +19,7 @@ android {
         versionName = "1.0"
     }
 
-    signingConfigs {
+    /*signingConfigs {
         create("development") {
             keyAlias = "devel"
             keyPassword = "cloudwalker"
@@ -32,7 +32,7 @@ android {
             storeFile = file("cloudwalker.jks")
             storePassword = "2256081445"
         }
-    }
+    }*/
 
     buildTypes {
         release {
@@ -52,7 +52,7 @@ android {
             buildConfigField("String", "POSTHOG_HOST", "\"${project.properties["posthog_host"]}\"")
             buildConfigField("String", "PostHogProjectName", "\"Launcher_Generic_Carousel_\"")
             isDebuggable = false
-            signingConfig = signingConfigs.getByName("production")
+            //signingConfig = signingConfigs.getByName("production")
         }
         debug {
             isMinifyEnabled = false
@@ -72,11 +72,11 @@ android {
             buildConfigField("String", "PostHogProjectName", "\"Launcher_Generic_Carousel_\"")
             isDebuggable = true
             versionNameSuffix = "-dev"
-            signingConfig = signingConfigs.getByName("development")
+            //signingConfig = signingConfigs.getByName("development")
         }
     }
 
-    flavorDimensions += "customer"
+    /*flavorDimensions += "customer"
     productFlavors {
         create("generic") {
             dimension = "customer"
@@ -103,7 +103,7 @@ android {
             applicationIdSuffix = ".com"
             versionNameSuffix = "-vs-com"
         }
-    }
+    }*/
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -114,6 +114,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }
@@ -153,14 +154,14 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
     implementation("com.squareup:otto:1.3.8")
 
-    implementation("ua.com.crosp.solutions.library:pretty-toast:0.2.0")
+    //implementation("ua.com.crosp.solutions.library:pretty-toast:0.2.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     implementation("com.google.zxing:core:3.3.3")
-    implementation("com.spoton:nats-android:2.4.6")
+    //implementation("com.spoton:nats-android:2.4.6")
 
     // FOR POSTHOG
-    implementation("com.posthog:posthog-android:3.4.2")
+    //implementation("com.posthog:posthog-android:3.4.2")
 
     // Moshi
     implementation("com.squareup.moshi:moshi-kotlin:1.11.0")

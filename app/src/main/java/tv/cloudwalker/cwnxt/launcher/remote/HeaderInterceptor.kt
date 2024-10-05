@@ -10,9 +10,8 @@ import javax.inject.Singleton
 class HeaderInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val deviceInfo = getDeviceInfo()
+        val deviceInfo = getHeaderMap()
         Log.d("Headers", "" + deviceInfo)
-
 
         val modifiedRequest = originalRequest.newBuilder()
             .apply {
@@ -25,48 +24,41 @@ class HeaderInterceptor @Inject constructor() : Interceptor {
         return chain.proceed(modifiedRequest)
     }
 
-    private fun getDeviceInfo(): Map<String, String> {
-        val deviceInfo = mutableMapOf<String, String>()
+   private fun getHeaderMap(): HashMap<String, String> {
+        val headerMap = HashMap<String, String>()
+        headerMap["emac"] = "00:25:92:84:F7:47"
+        headerMap["wmac"] = "D4:9E:3B:37:BA:07"
+        headerMap["mboard"] = "TP.SK518D.PB802"
+        headerMap["ram"] = "1G"
+        headerMap["skinversion"] = "1.0.0-dynamic_skin-62-g3bc3758"//getUiVersion()
+
+        headerMap["panel"] = "V320BJ8_Q01"//getPanel()
+        headerMap["model"] = "SMART TV"//getModel()
+        headerMap["keymd5"] = "FD889462A56360ED250705AF8603A602"//getKeyMD5()
+        headerMap["keysha256"] = "FF062321D475505A7DB6ED582A3F3411"//getSHA256()
+        headerMap["cotaversion"] = ""//
+        headerMap["fotaversion"] = "20240628_203625"//getFOTA()
+        headerMap["brand"] = "CLOUDTV_DEMO"//getBrand()
+        headerMap["vendor"] = "CLOUDWALKER"//getVendor()
+        headerMap["factory"] = "CLOUDWALKER"//getFactory()
 
 
-        // Get device-specific information using the getSystemProperty function
-        deviceInfo["host"] = "dev-cloudwalkerx2.do.cloudwalker.tv"
-        deviceInfo["x-real-ip"] = "103.189.184.185"
-        deviceInfo["x-forwarded-for"] = "103.189.184.185"
-        deviceInfo["x-client-verify"] = "SUCCESS"
-        deviceInfo["connection"] = "close"
-        deviceInfo["emac"] = "00:25:92:84:F7:47"
-        deviceInfo["wmac"] = "D4:9E:3B:37:BA:07"
-        deviceInfo["mboard"] = ""
-        deviceInfo["panel"] = ""
-        deviceInfo["model"] = "SMART TV"
-        deviceInfo["lversion"] = "project2"
-        deviceInfo["model"] = "SMART TV"
+        headerMap["package"] = "tv.cloudwalker.cwnxt.launcher.com"//getPackageName()
+        headerMap["features"] = "CLOUDTV_VOICE"//getFeatures()
+        headerMap["serialno"] = ""//getSerialNo()
 
-        deviceInfo["cotaversion"] = "" // Set as needed
-        deviceInfo["fotaversion"] = ""
-        deviceInfo["accept-version"] = "3.0.0" // Set as needed
-        deviceInfo["package"] = "tv.cloudwalker.cwnxt.launcher.com" // Set as needed
-        deviceInfo["kidsafe"] = "false" // Set as needed
-        deviceInfo["Keymd5"] = "FD889462A56360ED250705AF8603A602" // Set as needed
-        deviceInfo["factory"] = ""
-        deviceInfo["ram"] = "1" // Set as needed
-        deviceInfo["appversion"] = "project2" // Set as needed
-        deviceInfo["accept-encoding"] = "gzip"
-        deviceInfo["user-agent"] = "okhttp/4.9.1"
+        headerMap["lversion"] = "project2"
+        headerMap["appVersion"] = "project2"
 
-        return deviceInfo
+        headerMap["uid"] = "0a8064587baced48c38280fef63011fc"
+            //(context.getApplicationContext() as CloudwalkerApplication).getActiveProfileUID()
+        headerMap["androidSDKVersion"] = "30"//CloudwalkerApplication.instance.getAndroidSDKVersion()
+        headerMap["ocsNumber"] = "24095769"//getOcsNumber()
+        headerMap["androidVersion"] = "11"//getAndroidVersion()
+
+       //User-Agent: CLOUDTV_DEMO-20240628_203625/3.2.1-41-g9b8cb5e-new-dirty-cvte-com-dev
+       //ram: 1G
+        return headerMap
     }
 
-    private fun getSystemProperty(key: String): String {
-        var value = ""
-        try {
-            value = Class.forName("android.os.SystemProperties")
-                .getMethod("get", String::class.java)
-                .invoke(null, key) as String
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return value
-    }
 }
