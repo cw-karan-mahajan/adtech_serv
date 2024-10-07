@@ -19,8 +19,11 @@ interface ApiService {
 
 interface AdApiService {
     @GET
-    suspend fun getAd(@Url path: String, @QueryMap queryParams: Map<String, String>): Response<AdResponse?>
+    suspend fun getAd(@Url path: String, @QueryMap queryParams: Map<String, String>): Response<AdResponse>
 
     @GET
     suspend fun trackImpression(@Url path: String, @QueryMap queryParams: Map<String, String>): Response<Unit>
+
+    @GET
+    suspend fun trackClick(@Url path: String, @QueryMap queryParams: Map<String, String>): Response<Unit>
 }

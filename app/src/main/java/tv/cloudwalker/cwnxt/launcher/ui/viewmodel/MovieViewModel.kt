@@ -19,6 +19,7 @@ import tv.cloudwalker.cwnxt.launcher.models.AdResponse
 import tv.cloudwalker.cwnxt.launcher.models.NativeAdWrapper
 import com.google.gson.Gson
 import timber.log.Timber
+import java.util.Collections
 import javax.inject.Inject
 
 @UnstableApi
@@ -40,6 +41,10 @@ class MovieViewModel @Inject constructor(
 
     var mRowsAdapter: ArrayObjectAdapter? = null
 
+    private val _trackedImpressionTileIds = Collections.synchronizedSet(mutableSetOf<String>())
+    private val _pendingImpressions = Collections.synchronizedList(mutableListOf<Pair<String, String>>())
+    private var impressionTrackingJob: Job? = null
+
     fun getHomeScreenData(profileId: String = "") {
         viewModelScope.launch {
             repository.getHomeScreenData(PROFILE_UID).distinctUntilChanged().collect { response ->
@@ -49,7 +54,6 @@ class MovieViewModel @Inject constructor(
                         fetchAdsForTiles(movieResponse.rows.flatMap { it.rowItems })
                         _uiState.value = UiState.Success(movieResponse)
                     }
-
                     is Resource.Error -> {
                         _uiState.value = UiState.Error(response.message)
                         _toastMessage.postValue("Error loading data: ${response.message}")
@@ -65,10 +69,8 @@ class MovieViewModel @Inject constructor(
                 adRepository.fetchAd(adsServerUrl).collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            val adImageUrl = extractAdImageUrl(resource.data)
-                            tile.adImageUrl = adImageUrl
+                            updateTileWithAdData(tile, resource.data)
                         }
-
                         is Resource.Error -> {
                             Timber.e("Failed to fetch ad: ${resource.message}")
                         }
@@ -78,10 +80,64 @@ class MovieViewModel @Inject constructor(
         }
     }
 
-    private fun extractAdImageUrl(adResponse: AdResponse): String? {
-        return adResponse.seatbid?.firstOrNull()?.bid?.firstOrNull()?.let { bid ->
+    private fun updateTileWithAdData(tile: MovieTile, adResponse: AdResponse) {
+        adResponse.seatbid?.firstOrNull()?.bid?.firstOrNull()?.let { bid ->
             val nativeAdWrapper = gson.fromJson(bid.adm, NativeAdWrapper::class.java)
-            nativeAdWrapper.native?.assets?.firstOrNull { it.img != null }?.img?.url
+            tile.adImageUrl = nativeAdWrapper.native?.assets?.firstOrNull { it.img != null }?.img?.url
+            tile.clickTrackers = nativeAdWrapper.native?.link?.clicktrackers ?: emptyList()
+            tile.impressionTrackers = nativeAdWrapper.native?.imptrackers ?: emptyList()
+        }
+    }
+
+    fun onTileFocused(tile: MovieTile) {
+        if (_trackedImpressionTileIds.add(tile.tid)) {
+            tile.impressionTrackers?.forEach { impTrackerUrl ->
+                _pendingImpressions.add(tile.tid to impTrackerUrl)
+            }
+            if (tile.impressionTrackers?.isNotEmpty() == true) {
+                scheduleImpressionTracking()
+            }
+        }
+    }
+
+    private fun scheduleImpressionTracking() {
+        if (impressionTrackingJob?.isActive != true) {
+            impressionTrackingJob = viewModelScope.launch {
+                delay(100) // Small delay to batch impressions
+                trackPendingImpressions()
+            }
+        }
+    }
+
+    private suspend fun trackPendingImpressions() {
+        val impressions = _pendingImpressions.toList()
+        _pendingImpressions.clear()
+
+        impressions.forEach { (tileId, impTrackerUrl) ->
+            when (val result = adRepository.trackImpression(impTrackerUrl)) {
+                is Resource.Success -> {
+                    Timber.d("Impression tracked successfully for tile: $tileId")
+                }
+                is Resource.Error -> {
+                    Timber.e("Failed to track impression for tile: $tileId. Error: ${result.message}")
+                    _pendingImpressions.add(tileId to impTrackerUrl)
+                }
+            }
+        }
+    }
+
+    fun onTileClicked(tile: MovieTile) {
+        tile.clickTrackers?.forEach { clickTrackerUrl ->
+            viewModelScope.launch {
+                when (val result = adRepository.trackClick(clickTrackerUrl)) {
+                    is Resource.Success -> {
+                        Timber.d("Click tracked successfully for tile: ${tile.tid}")
+                    }
+                    is Resource.Error -> {
+                        Timber.e("Failed to track click for tile: ${tile.tid}. Error: ${result.message}")
+                    }
+                }
+            }
         }
     }
 
@@ -94,18 +150,21 @@ class MovieViewModel @Inject constructor(
         _networkStatus.value = isConnected
     }
 
-    fun onTileSelected(tile: MovieTile) {
-        // Handle tile selection
+    fun refreshContent() {
+        getHomeScreenData()
     }
 
-    fun refreshContent() {
-        // Refresh the content
-        getHomeScreenData()
+    fun clearData() {
+        _uiState.value = UiState.Loading
+        mRowsAdapter?.clear()
+        _trackedImpressionTileIds.clear()
+        _pendingImpressions.clear()
     }
 
     override fun onCleared() {
         super.onCleared()
-        // Cancel any ongoing coroutines or cleanup resources
+        impressionTrackingJob?.cancel()
+        // Cancel any other ongoing coroutines or cleanup resources
     }
 }
 

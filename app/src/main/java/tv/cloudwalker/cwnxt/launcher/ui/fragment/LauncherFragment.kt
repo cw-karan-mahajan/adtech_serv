@@ -98,7 +98,12 @@ class LauncherFragment : BrowseSupportFragment(), isConnected {
             shadowEnabled = false
             selectEffectEnabled = false
         }
-        rowsAdapter = ArrayObjectAdapter(lrp)
+        showProgressBar()
+        if (!::rowsAdapter.isInitialized) {
+            rowsAdapter = ArrayObjectAdapter(lrp)
+        } else {
+            rowsAdapter.clear()
+        }
         val dynamicPresenter = createCardLayout()
 
         data.rows.forEachIndexed { index, row ->
@@ -134,11 +139,22 @@ class LauncherFragment : BrowseSupportFragment(), isConnected {
 
     override fun connected() {
         viewModel.setNetworkStatus(true)
-        viewModel.getHomeScreenData()
+        refreshContent()
     }
 
     override fun notconnected() {
         viewModel.setNetworkStatus(false)
+    }
+
+    private fun refreshContent() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (::rowsAdapter.isInitialized) {
+                rowsAdapter.clear() // Clear existing items
+            }
+            adapter = null // Remove the adapter from the fragment
+            viewModel.clearData() // Clear data in ViewModel
+            viewModel.getHomeScreenData() // Fetch new data
+        }
     }
 
     private fun setupEventListeners() {

@@ -55,5 +55,7 @@ data class MovieTile(
     var rowLayout: String? = "",
     var rowHeader: String? = "",
     var rowAdConfig: MovieAdConfig? = null,
-    var adImageUrl: String? = null
+    var adImageUrl: String? = null,
+    var clickTrackers: List<String>? = null,
+    var impressionTrackers: List<String>? = null
 )

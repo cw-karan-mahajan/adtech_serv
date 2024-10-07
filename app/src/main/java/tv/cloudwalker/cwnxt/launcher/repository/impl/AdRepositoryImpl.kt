@@ -10,13 +10,15 @@ import tv.cloudwalker.cwnxt.launcher.repository.AdRepository
 import tv.cloudwalker.cwnxt.launcher.utils.NetworkConnectivity
 import tv.cloudwalker.cwnxt.launcher.utils.getResponse
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AdRepositoryImpl @Inject constructor(
     private val dynamicApiServiceFactory: DynamicApiServiceFactory,
     private val networkConnectivity: NetworkConnectivity
 ) : AdRepository {
 
-    override suspend fun fetchAd(adsServerUrl: String): Flow<Resource<AdResponse>> = flow {
+    override fun fetchAd(adsServerUrl: String): Flow<Resource<AdResponse>> = flow {
         if (!networkConnectivity.isConnected()) {
             emit(Resource.error("No internet connection"))
             return@flow
@@ -26,15 +28,57 @@ class AdRepositoryImpl @Inject constructor(
             val path = dynamicApiServiceFactory.extractPath(adsServerUrl)
             val queryParams = dynamicApiServiceFactory.extractQueryParams(adsServerUrl)
 
-            val response = adApiService.getAd(path, queryParams).getResponse()
-            val code = adApiService.getAd(path, queryParams).code()
-            if (response!= null && code == 200) {
-                emit(Resource.success(response))
+            val response = adApiService.getAd(path, queryParams)
+            val adResponse = response.getResponse()
+            val code = response.code()
+
+            if (adResponse != null && code == 200) {
+                emit(Resource.success(adResponse))
             } else {
                 emit(Resource.error("Failed to fetch ad: $code"))
             }
         } catch (e: Exception) {
             emit(Resource.error("Error fetching ad: ${e.message}"))
+        }
+    }
+
+    override suspend fun trackImpression(impTrackerUrl: String): Resource<Unit> {
+        if (!networkConnectivity.isConnected()) {
+            return Resource.error("No internet connection")
+        }
+        return try {
+            val adApiService = dynamicApiServiceFactory.createService(AdApiService::class.java, impTrackerUrl)
+            val path = dynamicApiServiceFactory.extractPath(impTrackerUrl)
+            val queryParams = dynamicApiServiceFactory.extractQueryParams(impTrackerUrl)
+
+            val response = adApiService.trackImpression(path, queryParams)
+            if (response.isSuccessful || response.code() == 200) {
+                Resource.success(Unit)
+            } else {
+                Resource.error("Failed to track impression: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Resource.error("Error tracking impression: ${e.message}")
+        }
+    }
+
+    override suspend fun trackClick(clickTrackerUrl: String): Resource<Unit> {
+        if (!networkConnectivity.isConnected()) {
+            return Resource.error("No internet connection")
+        }
+        return try {
+            val adApiService = dynamicApiServiceFactory.createService(AdApiService::class.java, clickTrackerUrl)
+            val path = dynamicApiServiceFactory.extractPath(clickTrackerUrl)
+            val queryParams = dynamicApiServiceFactory.extractQueryParams(clickTrackerUrl)
+
+            val response = adApiService.trackClick(path, queryParams)
+            if (response.isSuccessful || response.code() == 200) {
+                Resource.success(Unit)
+            } else {
+                Resource.error("Failed to track click: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            Resource.error("Error tracking click: ${e.message}")
         }
     }
 }
